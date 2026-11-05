@@ -58,6 +58,7 @@ public class VColorEditorDialog extends JDialog {
         addListenersToJTextField(jtfRed, jtfRedEnabled);
         addListenersToJTextField(jtfGreen, jtfGreenEnabled);
         addListenersToJTextField(jtfBlue, jtfBlueEnabled);
+        addListenersToMonoField();
 
         jtaModeDescription.setText(allVertexModeDescription);
     }
@@ -214,6 +215,63 @@ public class VColorEditorDialog extends JDialog {
         enabled.value = false;
         jtf.setText(String.valueOf(getColorComponentFromJTextField(jtf)));
         enabled.value = true;
+    }
+
+    private void normaliseMonoField() {
+        if (jtfMono.getText().isEmpty()) {
+            return;
+        }
+
+        int value = getColorComponentFromJTextField(jtfMono);
+        jtfMono.setText(String.valueOf(value));
+    }
+
+    private void addListenersToMonoField() {
+        ((AbstractDocument) jtfMono.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void replace(FilterBypass fb, int offset, int length,
+                                String text, AttributeSet attrs) throws BadLocationException {
+                if (!text.matches("[0-9]*")) {
+                    return;
+                }
+
+                super.replace(fb, offset, length, text, attrs);
+            }
+        });
+        jtfMono.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update();
+            }
+
+            private void update() {
+                if (jtfMono.getText().isEmpty()) {
+                    return;
+                }
+
+                int value = getColorComponentFromJTextField(jtfMono);
+                Color grey = new Color(value, value, value);
+                setSelectedColor(grey);
+            }
+        });
+        jtfMono.addActionListener(e -> normaliseMonoField());
+
+        jtfMono.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                normaliseMonoField();
+            }
+        });
     }
 
     private void addListenersToJTextField(JTextField jtf, MutableBoolean enabled) {
