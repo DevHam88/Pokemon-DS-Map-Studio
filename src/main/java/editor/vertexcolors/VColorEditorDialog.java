@@ -42,6 +42,7 @@ public class VColorEditorDialog extends JDialog {
     private MutableBoolean jtfRedEnabled = new MutableBoolean(true);
     private MutableBoolean jtfGreenEnabled = new MutableBoolean(true);
     private MutableBoolean jtfBlueEnabled = new MutableBoolean(true);
+    private MutableBoolean jtfMonoEnabled = new MutableBoolean(true);
 
     private String allVertexModeDescription = "Use left click for painting vertices. "
             + "Use mouse wheel for rotating the model. ";
@@ -171,6 +172,7 @@ public class VColorEditorDialog extends JDialog {
         jtfRedEnabled.value = true;
         jtfGreenEnabled.value = true;
         jtfBlueEnabled.value = true;
+        updateMonoField(color);
     }
 
     public void setSelectedColor(Color color) {
@@ -217,6 +219,26 @@ public class VColorEditorDialog extends JDialog {
         enabled.value = true;
     }
 
+    private void updateMonoField(Color color) {
+        if (!jtfMonoEnabled.value) {
+            return;
+        }
+
+        boolean isGrey = color.getRed() == color.getGreen()
+                && color.getGreen() == color.getBlue();
+
+        jtfMonoEnabled.value = false;
+        try {
+            if (isGrey) {
+                jtfMono.setText(String.valueOf(color.getRed()));
+            } else {
+                jtfMono.setText("");
+            }
+        } finally {
+            jtfMonoEnabled.value = true;
+        }
+    }
+    
     private void normaliseMonoField() {
         if (jtfMono.getText().isEmpty()) {
             return;
@@ -255,13 +277,19 @@ public class VColorEditorDialog extends JDialog {
             }
 
             private void update() {
-                if (jtfMono.getText().isEmpty()) {
+                if (!jtfMonoEnabled.value || jtfMono.getText().isEmpty()) {
                     return;
                 }
 
                 int value = getColorComponentFromJTextField(jtfMono);
                 Color grey = new Color(value, value, value);
-                setSelectedColor(grey);
+
+                jtfMonoEnabled.value = false;
+                try {
+                    setSelectedColor(grey);
+                } finally {
+                    jtfMonoEnabled.value = true;
+                }
             }
         });
         jtfMono.addActionListener(e -> normaliseMonoField());
@@ -311,6 +339,7 @@ public class VColorEditorDialog extends JDialog {
                     jPanel1.setBackground(color);
 
                     tsetHandler.setLastColorUsed(color);
+                    updateMonoField(color);
 
                     colorWheelPanel1.repaint();
                     colorBrightnessPanel1.repaint();
