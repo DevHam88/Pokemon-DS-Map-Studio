@@ -293,6 +293,8 @@ public class VColorEditorDialog extends JDialog {
         jtfGreen = new JTextField();
         jLabel3 = new JLabel();
         jtfBlue = new JTextField();
+        jlMono = new JLabel();
+        jtfMono = new JTextField();
         jPanel3 = new JPanel();
         jbVertexMode = new JButton();
         jbFaceMode = new JButton();
@@ -440,6 +442,15 @@ public class VColorEditorDialog extends JDialog {
             //---- jtfBlue ----
             jtfBlue.setText("255");
 
+            //---- jlMono ----
+            jlMono.setFont(new Font("Tahoma", Font.BOLD, 11));
+            jlMono.setText("Mono:");
+            jlMono.setLabelFor(jtfMono);
+
+            //---- jtfMono ----
+            jtfMono.setText("255");
+            jtfMono.setToolTipText("Set all three RGB channels to the same value (0-255).");
+            
             GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
             jPanel2.setLayout(jPanel2Layout);
             jPanel2Layout.setHorizontalGroup(
@@ -466,6 +477,10 @@ public class VColorEditorDialog extends JDialog {
                                         .addComponent(jLabel2)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jtfGreen, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup()
+                                        .addComponent(jlMono)
+                                        .addComponent(jtfMono, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
             );
@@ -480,16 +495,22 @@ public class VColorEditorDialog extends JDialog {
                         .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jtfRed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jtfGreen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jtfBlue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jtfRed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(true, jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jtfGreen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jtfBlue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jlMono)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(true, jtfMono, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
         }
@@ -670,6 +691,8 @@ public class VColorEditorDialog extends JDialog {
     private JTextField jtfGreen;
     private JLabel jLabel3;
     private JTextField jtfBlue;
+    private JLabel jlMono;
+    private JTextField jtfMono;
     private JPanel jPanel3;
     private JButton jbVertexMode;
     private JButton jbFaceMode;
